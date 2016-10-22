@@ -1,0 +1,22 @@
+#!/bin/bash
+if [ $# -lt 2 ];then
+  echo -n "$1" | xxd -E | awk -F':' '{print $2}' | tr -d ' ' | tr -d '\.' | tr -d "\n"
+else
+  if [ "$1" == "-h" ];then
+    echo "usage: asc2hex [opt] <hex>"
+    echo
+    echo "-h: this help screen"
+    echo "-d: default, prints hex 0-F to screen"
+    echo "-p: prints hex with \x structure for python"
+    echo "-x: prints hex with 0x structure for xxd"
+  fi
+  if [ "$1" == "-d" ];then
+    echo -n "$2" | xxd -E | awk -F':' '{print $2}' | tr -d ' ' | tr -d '\.' | tr -d "\n" 
+  fi
+  if [ "$1" == "-p" ];then
+    echo -n "$2" | xxd -E | awk -F':' '{print $2}' | tr -d ' ' | tr -d '\.'| tr -d "\n"  | sed 's/.\{2\}/\\x&/g'
+  fi
+  if [ "$1" == "-x" ];then
+    echo -n "$2" | xxd -E | awk -F':' '{print $2}' | tr -d ' ' | tr -d '\.' | tr -d "\n" | sed 's/.\{2\}/0x&/g'
+  fi
+fi
